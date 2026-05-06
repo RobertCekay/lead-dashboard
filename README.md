@@ -1,5 +1,7 @@
 # Lead Dashboard
 
+[![CI](https://github.com/RobertCekay/lead-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/RobertCekay/lead-dashboard/actions/workflows/ci.yml)
+
 A small full-stack app a technical lead might use day-to-day: track tasks with risk and effort estimates, log architectural decisions, and see delivery health at a glance.
 
 - **Backend**: Ruby on Rails 8 (API only) + PostgreSQL
@@ -134,6 +136,17 @@ Each component has its own `*.test.jsx`. The API module is mocked per test, so t
 | `Tasks`     | Empty state, list rendering, add-button gating, create + edit flows |
 | `Decisions` | Empty state, list rendering, create + edit flows                    |
 
+### Linting
+
+```bash
+cd backend && bundle exec rubocop          # report; add -a to auto-fix
+cd frontend && npm run lint                # report; npm run lint -- --fix to auto-fix
+```
+
+### Continuous integration
+
+GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs both linters, both test suites, and the frontend production build on every push and pull request. The backend job spins up a Postgres 16 service container with a healthcheck so tests run against a real database.
+
 ---
 
 ## Engineering choices
@@ -151,10 +164,9 @@ A few decisions worth calling out, and why:
 
 Roughly in priority order, treating this like a real project I'd hand a team:
 
-1. **CI** — GitHub Actions running `bin/rails test` + `npm test` + linters on every PR, with a coverage badge.
-2. **TypeScript** on the frontend — strict mode, typed API layer.
-3. **ADRs** in `docs/adr/` — capture the decisions above (and future ones) in version-controlled markdown.
-4. **Auth** — Devise or a JWT layer; the app currently treats every visitor as the same user.
-5. **Loading and error states** — the React components render nothing if a request fails. A real production app needs error boundaries + retry UX.
-6. **Production frontend image** — multi-stage Vite build served by nginx, paired with the existing Rails production Dockerfile.
-7. **Observability** — structured request logs, basic OpenTelemetry instrumentation, a `/health` endpoint.
+1. **TypeScript** on the frontend — strict mode, typed API layer.
+2. **ADRs** in `docs/adr/` — capture the decisions above (and future ones) in version-controlled markdown.
+3. **Auth** — Devise or a JWT layer; the app currently treats every visitor as the same user.
+4. **Loading and error states** — the React components render nothing if a request fails. A real production app needs error boundaries + retry UX.
+5. **Production frontend image** — multi-stage Vite build served by nginx, paired with the existing Rails production Dockerfile.
+6. **Observability** — structured request logs, basic OpenTelemetry instrumentation, a `/health` endpoint.
