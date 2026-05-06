@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+# Development image for the React/Vite frontend.
+# Pairs with docker-compose.yml at the repo root.
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
