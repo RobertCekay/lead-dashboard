@@ -37,6 +37,20 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
+  test "update modifies an existing task and returns it" do
+    task = tasks(:one)
+
+    patch task_url(task), params: {
+      task: { status: "done", estimate_hours: 6 }
+    }
+
+    assert_response :success
+    body = JSON.parse(response.body)
+    assert_equal "done", body["status"]
+    assert_equal 6, body["estimate_hours"]
+    assert_equal "done", task.reload.status
+  end
+
   test "summary returns aggregate task counts and hours" do
     get summary_url
     assert_response :success
