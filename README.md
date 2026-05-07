@@ -16,7 +16,7 @@ A small full-stack app a technical lead might use day-to-day: track tasks with r
 The fastest way to run the app. Requires only Docker Desktop.
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/RobertCekay/lead-dashboard
 cd lead-dashboard
 docker compose up
 ```
